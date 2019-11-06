@@ -1,7 +1,7 @@
-loadDoc("https://jsonplaceholder.typicode.com/users", emailSplit); //call loadDoc and emailSplit function
+loadDoc("https://jsonplaceholder.typicode.com/users", emailSplit); 
 function loadDoc(url, cFunction) {
   var xhttp;
-  xhttp = new XMLHttpRequest(); //create request
+  xhttp = new XMLHttpRequest(); 
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       cFunction(this);
@@ -12,35 +12,35 @@ function loadDoc(url, cFunction) {
 }
 
 function emailSplit(xhttp) {
-  const recDataOld = JSON.parse(xhttp.responseText); //sets response as constant
+  const recDataOld = JSON.parse(xhttp.responseText); 
   var emailList = [];
   for (property in recDataOld) {
-    //loop through data
-    emailList.push(recDataOld[property].email); //takes out each email and adds to list
+    
+    emailList.push(recDataOld[property].email); 
   }
-  emailList = emailList.sort(); //sorts alphabetically
+  emailList = emailList.sort(); 
   for (entry in emailList) {
-    document.getElementById("box1").innerHTML += emailList[entry] + "</br>"; //adds to box1 div and adds line break each entry
+    document.getElementById("box1").innerHTML += emailList[entry] + "</br>"; 
   }
 }
 
-//fetch
-fetch("https://jsonplaceholder.typicode.com/users") //path we are fetching
+
+fetch("https://jsonplaceholder.typicode.com/users") 
   .then(function(response) {
-    //promise
-    return response.json(); //returns promise containing the response object
+    
+    return response.json(); 
   })
   .then(function(myJson) {
     usernameList = [];
-    //const recDataNew = JSON.parse(myJson);
+    
     for (i in myJson) {
-      //loops through response data
-      usernameList.push(myJson[i].username); //add to list
+      
+      usernameList.push(myJson[i].username); 
     }
     usernameList.sort(function(a, b) {
-      //sorts by length of string
+      
       return a.length - b.length;
     });
     for (name in usernameList)
-      document.getElementById("box2").innerHTML += usernameList[name] + "</br>"; //add to box2 div
+      document.getElementById("box2").innerHTML += usernameList[name] + "</br>"; 
   });

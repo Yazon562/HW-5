@@ -1,65 +1,46 @@
-var xhttp = new XMLHttpRequest();
-
-xhttp.onreadystatechange = function()
-{
-    if (this.readyState == 4 && this.status == 200) 
-        {
-
-            var myData = JSON.parse(this.responseText) 
-            console.log(myData.length)
-          
-            var sorted = []
-            console.log(typeof myData) 
-            for (i=0; i< myData.length; i++)
-                {
-                    console.log(myData[i].email);
-                    sorted.push(myData[i].email + '<br>') 
-                   
-                }
-                sorted = sorted.sort()
-            document.getElementById("output1").innerHTML = sorted.join(' '); 
-       
-        }
-};
-
-xhttp.open( "Get" , "https://jsonplaceholder.typicode.com/users", true);
-xhttp.send();
-
-
-
-
-
-fetch  ("https://jsonplaceholder.typicode.com/users")
-.then  ( response => response.json())                   
-.then (data => {                                      
-        const sortData = data.sort ((a,b) => a.username.length -b.username.length);
-        console.log(typeof sortData);
-        sortLength( JSON.stringify(sortData));
-
-       
-})
-
-.catch ( error => console.log('There was an error:' , error))
-
-
-
-
-
-
-
-function sortLength (ourData){
-var needSort = []
-var LOL = JSON.parse(ourData)
-
-
-for (i=0; i< LOL.length; i++)
-                 {
-                     console.log(i)
-                     console.log(LOL[i].username);
-                     needSort.push(LOL[i].username + '<br>');
-                     console.log(needSort)
-                }
-
-document.getElementById("output2").innerHTML = needSort.join(' ');              
+loadDoc("https://jsonplaceholder.typicode.com/users", emailSplit); //call loadDoc and emailSplit function
+function loadDoc(url, cFunction) {
+  var xhttp;
+  xhttp = new XMLHttpRequest(); //create request
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cFunction(this);
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.send();
 }
 
+function emailSplit(xhttp) {
+  const recDataOld = JSON.parse(xhttp.responseText); //sets response as constant
+  var emailList = [];
+  for (property in recDataOld) {
+    //loop through data
+    emailList.push(recDataOld[property].email); //takes out each email and adds to list
+  }
+  emailList = emailList.sort(); //sorts alphabetically
+  for (entry in emailList) {
+    document.getElementById("box1").innerHTML += emailList[entry] + "</br>"; //adds to box1 div and adds line break each entry
+  }
+}
+
+//fetch
+fetch("https://jsonplaceholder.typicode.com/users") //path we are fetching
+  .then(function(response) {
+    //promise
+    return response.json(); //returns promise containing the response object
+  })
+  .then(function(myJson) {
+    usernameList = [];
+    //const recDataNew = JSON.parse(myJson);
+    for (i in myJson) {
+      //loops through response data
+      usernameList.push(myJson[i].username); //add to list
+    }
+    usernameList.sort(function(a, b) {
+      //sorts by length of string
+      return a.length - b.length;
+    });
+    for (name in usernameList)
+      document.getElementById("box2").innerHTML += usernameList[name] + "</br>"; //add to box2 div
+  });
